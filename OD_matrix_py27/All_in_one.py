@@ -32,7 +32,7 @@ def hr_str(start_hr, finish_hr, AM_PM):
 
 def find_dist(adj_matrix_O_D, link_config):
     # Perform request to use the Google Maps API web service
-    API_key = 'AIzaSyCGSGb99UKgvvK_MtadNufe5_WCb_4PyuI' # enter Google Maps API key
+    API_key = '??' # enter Google Maps API key
     gmaps = googlemaps.Client(key=API_key)
     # Empty list - will be used to store calculated distances
     list_ = []
