@@ -1,0 +1,21 @@
+---
+region_: region_z         # region of data (Do not change)
+# new_file:  '2020_09_15_01_40_43'  # Name of the yaml file if setting has been learnt before
+new_file: null                      # Name of the yaml file if setting is new
+interval_t: 15                      # Time interval in data (minutes)
+n_hr: 7                             # Number of hours of data
+AM_PM: False                        # If hours in data have AM-PM setting, then True
+start_hr_0: 5  # 5 AM               # Starting hour of data without padding
+finish_hr: 10  # 10 AM              # Finishing hour of data
+pad_hr: 2                           # Number of padding hours in the beggining of data
+num_paths: 6                        # Maximum number of paths from origin to destination
+incentive_list: [2, 10]             # Set of incentives
+theta_temp: 1                      # Temperature of Softmax function in computing choice probability
+n_epochs: 20000                     # Number of epochs in training Neural Network for OD estimation
+batch_size: 8192                    # Batch size in training Neural Network for OD estimation
+lr: 0.01                            # Learning rate in training Neural Network for OD estimation
+adagrad_: True                      # Using adagrad in training Neural Network for OD estimation
+use_GPU_: True                      # Using GPU in training Neural Network for OD estimation
+month_dict: {5: [1]}                # Days for which we do computatoin
+OD: ''                         # Set of OD pairs ('' if we want all nodes to be OD points)
+# month_dict: {3: [1, 2, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 26, 27, 28, 29, 30], 4: [2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 23, 24, 25, 26, 27,30], 5: [1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 29, 30, 31]}

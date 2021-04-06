@@ -1,0 +1,22 @@
+AM_PM: false
+OD: ''
+adagrad_: true
+batch_size: 8192
+finish_hr: 10
+incentive_list:
+- 2
+- 10
+interval_t: 15
+lr: 0.01
+month_dict:
+  5:
+  - 1
+n_epochs: 20000
+n_hr: 7
+new_file: null
+num_paths: 6
+pad_hr: 2
+region_: region_z
+start_hr_0: 5
+theta_temp: 1
+use_GPU_: true
