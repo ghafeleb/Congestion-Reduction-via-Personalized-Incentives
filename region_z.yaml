@@ -1,0 +1,27 @@
+---
+region: 'region_z'
+addOpt: 'optimization'
+addODEstimation: 'OD_matrix_py27'
+subAddData: 'data'
+subAddGraph: 'graph'
+subAddRegion: 'region_z'
+subAddSpeedVolume: 'speed_volume'
+subAddPlot: 'plot'
+subAddFitCurve: 'fit_curve'
+subAddLossFunction: 'loss_function'
+subAddFitData: 'fit_data'
+myIDList: [1, 2]
+myODList: [1, 2]
+latitudeList: [34.151618, 34.22951]
+longitudeList: [-118.12949, -118.410212]
+interval_t: 5                           # Interval time of the data
+start_hr: 5                           # Starting hour of the data without padding
+finish_hr: 22                           # Ending hour of the data
+interval_t_ODEstimation: 15                           # Interval time of the data
+start_hr_ODEstimation: 5                           # Starting hour of the data without padding
+finish_hr_ODEstimation: 10                           # Ending hour of the data
+data_year: 2018                         # Year of the data
+months_: 'Mar2May'                      # Data months
+months_inventory: 'Feb2Nov'
+n_pad_hour: 2
+n_days: 65
