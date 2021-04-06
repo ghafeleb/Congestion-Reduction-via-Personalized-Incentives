@@ -4,7 +4,6 @@ With rapid population growth and urban development, traffic congestion has becom
 Due to not being able to share our data with public, we ran createSyntheticData.py to generate synthetic data so you can follow the next steps to run the codes.
 
 # Optimization model
-
 ### Requirements
 - Python 3.6.8
 - PyTorch 1.1.0
@@ -19,24 +18,23 @@ Due to not being able to share our data with public, we ran createSyntheticData.
 - gurobipy 9.0.2
 - psutil 5.7.2
 
-
 ## Learning graph of the network
-First, define the desired setting on the file "DRYAD/optimization/YAML_graph/region_z.yaml".
+First, define the desired setting on the file "optimization/YAML_graph/region_z.yaml".
 Go to the 'optimization' folder. Run the following command:
 ```bash
 python All_in_one.py --config_filename=YAML_graph/region_z.yaml
 ```
 
 ## Learning parameters of the BPR function
-First, define the desired setting on the file "DRYAD/optimization/YAML_BPR/region_z.yaml".
+First, define the desired setting on the file "optimization/YAML_BPR/region_z.yaml".
 Go to the 'optimization' folder. Run the following command to learn the parameters of the BPR function:
 ```bash
 python link_capacity.py --config_filename=YAML_BPR/region_z.yaml
 ```
-The extracted information for region z is provided in: 'DRYAD/optimizaiton/data/capcacity/region_z'
+The extracted information for region z is provided in: 'optimizaiton/data/capcacity/region_z'
 
 ## Learning free flow travel time of routes
-First, define the desired setting on the file "DRYAD/optimization/YAML_BPR/region_z.yaml".
+First, define the desired setting on the file "optimization/YAML_BPR/region_z.yaml".
 Go to the 'optimization' folder. Run the following command:
 ```bash
 python tt_BPR.py --config_filename=YAML_BPR/region_z.yaml
@@ -44,7 +42,7 @@ python tt_BPR.py --config_filename=YAML_BPR/region_z.yaml
 
 
 ## Linear model (no incentive or baseline)
-To solve these linear optimization model, first you should Follow the steps of OD estimation section to retrieve all matrices P, R, and Q. Next, you should copy and paste the latest created files from the following folders to the folders with same name in "DRYAD/optimization/DPFE_files":
+To solve these linear optimization model, first you should Follow the steps of OD estimation section to retrieve all matrices P, R, and Q. Next, you should copy and paste the latest created files from the following folders to the folders with same name in "optimization/DPFE_files":
 1. observe_index_N
 2. P_matrix
 3. P_matrix_opt
@@ -56,7 +54,7 @@ Then, you need to specify the name of the generated folders in these 7 folders i
 
 ## Incentivizing - Linear model 
 ### Run model (data: region_z)
-First, define the desired setting on the file "DRYAD/optimizaiton/YAML/region_z.yaml".
+First, define the desired setting on the file "optimizaiton/YAML/region_z.yaml".
 ```bash
 start_hour_opt: 7 # 7 AM
 ub_multiplier_list: [4.] # Multiplier of upper bound of capacity constraints
@@ -106,14 +104,14 @@ Code is an adapted and modified version of code of https://github.com/Lemma1/DPF
 \*Find PyTorch for Python 2 on <a href="https://download.pytorch.org/whl/cu92/torch_stable.html" target="_top">link</a> and download "torch-1.5.0+cu92-cp27-cp27mu-linux_x86_64.whl".
 
 ## Learning graph of the network
-First, define the desired setting on the file "DRYAD/OD_matrix_py27/YAML_graph/region_z.yaml".
+First, define the desired setting on the file "OD_matrix_py27/YAML_graph/region_z.yaml".
 Go to the 'OD_matrix_py27' folder. Run the following command:
 ```bash
 python All_in_one.py --config_filename=YAML_graph/region_z.yaml
 ```
 
 ### Run the model (data: region_z)
-First, define the desired setting on the file "DRYAD/OD_matrix_py27/YAML/region_z.yaml".
+First, define the desired setting on the file "OD_matrix_py27/YAML/region_z.yaml".
 ```bash
 region_: region_z         # region of data (Do not change)
 # new_file:  '??'  # Name of the yaml file if setting has been learnt before
@@ -146,7 +144,7 @@ The generated files of matrix P, R, and travel time (based on historical data) a
 ### Speed data
 Speed data of the USC neighborhood in Los Angeles. The source of data is available data on ADMS system of USC. Data includes business days of March to May of 2018 from 3 to 10 AM. The speed data of 3 to 5 AM is added artificially and is equal to real speed at 5 AM. We call data of 3 AM to 5 AM a padded data.
 Due to not being able to share the data with public, a synthetic data has been created.
-Address of data: 'DRYAD/OD_matrix_py27/data/speed_volume/Mar2May_2018_region_z_AVG15_5-10_with_linkID_pad/my_link_avg_count_data_AVG15min_5-10_region_z_pad.pickle'
+Address of data: 'OD_matrix_py27/data/speed_volume/Mar2May_2018_region_z_AVG15_5-10_with_linkID_pad/my_link_avg_count_data_AVG15min_5-10_region_z_pad.pickle'
 Foramt: The speed data is a pickled dictionary of 'pandas.DataFrame' files. Keys of the dictionary are link IDs. Indecies of the each DataFrame includes the date of the record and headers contain time of it. Here is an example of first three rows of DataFrame of link 0:
 |            |    03:00:00   |   03:15:00   |    ...   |    09:45:00   |
 |:----------:|:-------------:|:------------:|:--------:|:-------------:|
@@ -159,7 +157,7 @@ Foramt: The speed data is a pickled dictionary of 'pandas.DataFrame' files. Keys
 ### Volume data
 Volume data of the USC neighborhood in Los Angeles. The source of data is available data on ADMS system of USC. Data includes business days of March to May of 2018 from 3 to 10 AM. The speed data of 3 to 5 AM is added artificially and is increasing gradually from 10% of real volume of 5 AM for 3 AM to real speed at 5 AM for 5 AM. We call data of 3 AM to 5 AM a padded data.
 Due to not being able to share the data with public, a synthetic data has been created.
-Address of data: 'DRYAD/OD_matrix_py27/data/speed_volume/Mar2May_2018_region_z_AVG15_5-10_with_linkID_pad/my_link_avg_spd_data_AVG15min_5-10_region_z_pad.pickle'
+Address of data: 'OD_matrix_py27/data/speed_volume/Mar2May_2018_region_z_AVG15_5-10_with_linkID_pad/my_link_avg_spd_data_AVG15min_5-10_region_z_pad.pickle'
 Foramt: The volume data is a pickled dictionary of 'pandas.DataFrame' files. Keys of the dictionary are link IDs. Indecies of the each DataFrame includes the date of the record and headers contain time of it. Here is an example of first three rows of DataFrame of link 0:
 |            |    03:00:00   |   03:15:00   |    ...   |    09:45:00   |
 |:----------:|:-------------:|:------------:|:--------:|:-------------:|
@@ -170,15 +168,15 @@ Foramt: The volume data is a pickled dictionary of 'pandas.DataFrame' files. Key
 
 ### OD points
 List of origin points and destination points.
-Address: 'DRYAD/OD_matrix_py27/data/graph/region_z/my_od_list_region_z_original.pickle'
+Address: 'OD_matrix_py27/data/graph/region_z/my_od_list_region_z_original.pickle'
 
 ### Graph of the network
 Transportaion network in Networkx graph format.
-Address: 'DRYAD/OD_matrix_py27/data/graph/region_z/my_graph_region_z_original.gpickle'
+Address: 'OD_matrix_py27/data/graph/region_z/my_graph_region_z_original.gpickle'
 
 ### YAML file (config)
 File of the config of the OD estimation.
-Address: 'DRYAD/OD_matrix_py27/YAML/region_z.yaml'
+Address: 'OD_matrix_py27/YAML/region_z.yaml'
 ```bash
 ---
 region_: region_z         # region of data (Do not change)
@@ -204,14 +202,14 @@ OD: ''                         # Set of OD pairs ('' if we want all nodes to be 
 
 ### Probability choice matrix
 Matrix of choice probability of the driver given an incentive for a specific route at a specific time. The format is pickled dense Numpy array.
-Address: 'DRYAD/OD_matrix_py27/P_matrix_opt'
+Address: 'OD_matrix_py27/P_matrix_opt'
 
 ### Route assignment matrix
 Matrix of probability that a driver is at a link at a specific time. The format is pickled dense Numpy array.
-Address: 'DRYAD/OD_matrix_py27/R_matrix'
+Address: 'OD_matrix_py27/R_matrix'
 
 ### OD estimation
 Estimation of number of drivers traveling between OD pairs in different times. The format is array.
-Address: 'DRYAD/OD_matrix_py27/Q_matrix'
+Address: 'OD_matrix_py27/Q_matrix'
 
 
