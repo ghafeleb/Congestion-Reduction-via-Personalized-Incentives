@@ -141,7 +141,7 @@ def main(args):
     row_size_adj = adj_matrix.shape[0]
 
     # Perform request to use the Google Maps API web service
-    API_key = 'AIzaSyCGSGb99UKgvvK_MtadNufe5_WCb_4PyuI'  # enter Google Maps API key
+    API_key = '??'  # enter Google Maps API key
     gmaps = googlemaps.Client(key=API_key)
 
     # Empty list - will be used to store calculated distances
