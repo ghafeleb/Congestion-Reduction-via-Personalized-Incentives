@@ -1,0 +1,15 @@
+---
+region_input: "region_z"         # Region of adjacency data of input 
+region_output: "region_z"         # Region of adjacency data of output
+sub_: False                      # True if we work on a subregion
+region_of_subregion_: "region_z"       # Region from which we get the subregion
+interval_t: 15                           # Interval time of the data
+AM_PM: False                              # Time index of the data in AM-PM format or not
+start_hr_0: 5                           # Starting hour of the data without padding
+finish_hr: 10                           # Ending hour of the data
+pad_: True                              # True if data has padding
+pad_hr: 2                               # Number of padding hours
+data_year: 2018                         # Year of the data
+months_: 'Mar2May'                      # Data months
+
+

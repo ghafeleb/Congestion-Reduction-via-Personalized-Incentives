@@ -1,0 +1,19 @@
+---
+save_model_: False
+region_: 'region_z'  
+pad_str: '_pad'
+n_hours: 7  # 3 AM - 10 AM
+start_hour: 3  # 3 AM
+start_hour_opt: 5  # 5 AM
+start_minute_opt: 0  # 0 minutes
+n_hr_test_horizon: 1  # 1 hour of analysis
+interval_t: 15  # 15-minute intervals
+analysis_month: 5
+analysis_day: 1
+num_paths_temp: 6
+incentive_list_available: [1, 2, 5, 10, 1000]  # Incentives included in the data
+incentive_list_temp: [1, 2, 5, 10, 1000]  # Incentives under analysis
+# new_file_temp: '2020_09_15_01_43_41'
+new_file_temp: '2020_09_15_01_40_43'
+folder_DPFE: 'DPFE_files'
+

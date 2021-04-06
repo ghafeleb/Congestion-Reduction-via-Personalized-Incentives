@@ -1,0 +1,11 @@
+---
+region_: "region_z"         # Region of adjacency data of input 
+interval_t: 5                           # Interval time of the data
+start_hr: 5                           # Starting hour of the data without padding
+finish_hr: 22                           # Ending hour of the data
+data_year: 2018                         # Year of the data
+months_: 'Mar2May'                      # Data months
+n_train: 1                             # Number of times that we run GD for BPR coefficients of one sensor
+num_paths_temp: 6
+
+

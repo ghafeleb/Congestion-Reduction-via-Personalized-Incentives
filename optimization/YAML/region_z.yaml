@@ -1,0 +1,27 @@
+---
+start_hour_opt: 7 # 7 AM
+ub_multiplier_list: [4.] # Multiplier of upper bound of capacity constraints
+
+incentive_list_available: [2, 10] # Incentives included in the data
+incentive_list_temp: [2, 10]  # Incentives under analysis
+new_file_temp: '2021_03_28_03_35_11' # [2, 10], temp=1
+OD: ''  # Set of OD pairs
+theta_temp: 1 
+
+
+save_model_: True
+region_: 'region_z'  
+pad_str: '_pad'
+n_hours: 7  # 3 AM - 10 AM
+start_hour: 3  # 3 AM
+start_minute_opt: 0  # 0 minutes
+n_hr_test_horizon: 1  # 1 hour of analysis
+interval_t: 15  # 15-minute intervals
+analysis_month: 5
+analysis_day: 1
+num_paths_temp: 6
+folder_DPFE: 'DPFE_files'
+MIPGap_: 0.01  # Accuracy of the Gurobi solver
+tot_budget_: [100000., 10000., 1000., 100., 0.]
+plot_: True
+one_arrival: False
