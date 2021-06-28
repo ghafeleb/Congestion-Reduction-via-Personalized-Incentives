@@ -33,33 +33,3 @@ else
         end
     end
 end
-
-
-
-% while abs(x_temp)>error_bisection
-% %     if f_obj(c, s0, w, L, l, a, r)<0&&f_obj(min_bis, s0, w, L, l, a, r)<0
-% %     if f_obj(c, s0, w, L, l, a, r)<0
-%     if x_temp<0
-%         min_bis=c;
-%     else
-%         max_bis=c;
-%     end
-%     c=(min_bis+max_bis)/2;
-%     x_temp = f_obj(c, tt0, w, l, a, r);
-%     counter = counter + 1;
-%     if counter>max_iter
-%         break
-%     end
-% end
-
-
-
-% c=(a+b)/2;
-% while abs(f(c))>error
-%     if f(c)<0&&f(a)<0
-%         a=c;
-%     else
-%         b=c;
-%     end
-%     c=(a+b)/2;
-% end
