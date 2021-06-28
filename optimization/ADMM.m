@@ -2,62 +2,28 @@ clear all;
 clc;
 close all;
 
-
 region_ = 'region_y3';
-
-% setting_region = 'inc_2_10_th_1';
-% time_reigon = '7_AVG15_pad';
-% fileName = '_StartHour_7_AVG15_pad_theta1e+00_inc_2_10';
-
-% setting_region = 'inc_2_10_th_1';
-% time_reigon = '6_AVG15_pad';
-% fileName = '_StartHour_6_AVG15_pad_theta1e+00_inc_2_10';
-
-setting_region = 'inc_1_2_5_10_1000_th_1';
+setting_region = 'inc_2_10_th_1';
 time_reigon = '7_AVG15_pad';
-fileName = '_StartHour_7_AVG15_pad_theta1e+00_inc_1_2_5_10_1000';
-
-
-% filename_diary = fullfile(region_, setting_region, time_reigon, strcat('commandWindow.txt'));
-% diary(filename_diary);
-
+fileName = '_StartHour_7_AVG15_pad_theta1e+00_inc_2_10';
 filename = fullfile(region_, setting_region, time_reigon, strcat('AllVar', fileName, '.mat'));
 load(filename);
 
 %%
-a0 = 523.7;
-a1 = -1654.4 * 10^(-2);
-a2 = 2635.4 * 10^(-4);
-a3 = -1771.5* 10^(-6);
-a4 = 442.9 * 10^(-8);
 beta0 = 1.0;
 beta1 = 0.15;
 tt0_array = readmatrix(fullfile(region_, strcat('Mar2May_2018_new_5-22_link_tt_0_minutes_', region_, '.csv')));
 w_array = readmatrix(fullfile(region_, strcat('Mar2May_2018_new_5-22_link_capacity_', region_, '.csv')));
 L_array = readmatrix(fullfile(region_, 'link_length_meter_region_y3_original.csv'))./1000;
 F_speed = @(g, v, tt0, w, L) L*(tt0*(1 + 0.15*((g+v)/w)^4))^(-1);
-F_CO2 = @(g, v, tt0, w, L) (g+v)*(a0 + a1*F_tt(g, v, tt0, w, L) + a2*(F_tt(g, v, tt0, w, L))^2 + a3*(F_tt(g, v, tt0, w, L))^3 + a4*(F_tt(g, v, tt0, w, L))^4);
 
-% g = @(x) 47.0/(beta0 + beta1 * (x/30.0)^4);
-% tt = @(x) x*g(x)^(-1)*L;
-% f = @(x) x*(a0 + a1*g(x) + a2*(g(x))^2 + a3*(g(x))^3 + a4*(g(x))^4);
-
-% tt0 = tt0_array(mod(iter_gamma, size(tt0_array, 1)) + 1, 3);
-% w = w_array(mod(iter_gamma, size(w_array, 1)) + 1, 3);
-% a = A(iter_gamma, :);
-% l = lambda4(iter_gamma);
-% v = v2(iter_gamma) + v3(iter_gamma) + v4(iter_gamma); 
-% gamma(iter_gamma) = bisectionMethodNew(gradient_gamma, v, min_bis, max_bis, error_bisection, tt0, w, l, a, rho);
-% F_gamma_total = F_gamma_total + F_gamma(gamma(iter_gamma, 1), v, tt0, w);
-                
-% q = q*2;
 m = size(A, 2);
 n = sum(q);
 
 S = zeros(m,n);
 W = zeros(m,n);
 H = zeros(m,n);
-Omega = 10000; % %%%%%%%%%%%%%%%%%%%%%%%% Budget
+Omega = 10000; % Budget
 u = zeros(m,1);
 gamma = zeros(size(A,1),1);
 beta = 0;
@@ -76,32 +42,28 @@ lambda7 = 0;
 lambda9 = zeros(size(W));
 lambda10 = zeros(size(Q));
 
-rho = 10; % %%%%%%%%%%%%%%%%%%%%%%%% Rho
-lambda_H_list = [0.1, 1, 5, 9]; % %%%%%%%%%%%%%%%%%%%%%%%% Multiplier of H(H-1)
-% lambda_H_list = [1, 5]; % %%%%%%%%%%%%%%%%%%%%%%%% Multiplier of H(H-1)
+rho = 10; % Rho
+lambda_H_list = [0.1, 1, 5, 9]; % Multiplier of H(H-1)
+% lambda_H_list = [1, 5]; % Multiplier of H(H-1)
 % if rho==lambda_H
 %     msg = 'rho==lambda_H!!';
 %     error(msg)
 % end
-MaxIter = 150001; % %%%%%%%%%%%%%%%%%%%%%%%% Max number of iteration for ADMM
-% MaxIter = 101; % %%%%%%%%%%%%%%%%%%%%%%%% Max number of iteration for ADMM
-MaxIterQ = 0;% %%%%%%%%%%%%%%%%%%%%%%%% Max number of iteration for ADMM-Q
+MaxIter = 150001; % Max number of iteration for ADMM
+% MaxIter = 101; % Max number of iteration for ADMM
+MaxIterQ = 0;% Max number of iteration for ADMM-Q
 min_loss = inf;
 min_norm = inf;
 min_norm2 = inf;
 min_gap = inf;
 
-% s0_array = readmatrix(fullfile(region_, 'Mar2May_2018_new_5-22_link_s_0_region_y3.csv'));
 tt0_array = readmatrix(fullfile(region_, strcat('Mar2May_2018_new_5-22_link_tt_0_minutes_', region_, '.csv')));
 w_array = readmatrix(fullfile(region_, strcat('Mar2May_2018_new_5-22_link_capacity_', region_, '.csv')));
-% L_array = readmatrix(fullfile(region_, 'link_length_mile_region_y3_original.csv'));
-% F_gamma = @(g, tt0, w) 0.15*tt0*(g^5)/(w^4) + g*tt0;
 F_gamma = @(g, v, tt0, w) 0.15*tt0*((g+v)^5)/(w^4) + (g+v)*tt0;
-% gradient_gamma = @(g, tt0, w, l, a, r) 5*0.15*tt0*(g^4)/(w^4) + tt0 - l - r*(a*u-g);
 gradient_gamma = @(g, v, tt0, w, l, a, r) 5*0.15*tt0*((g+v)^4)/(w^4) + tt0 - l - r*(a*u-g);
-error_bisection = 1e-5;% %%%%%%%%%%%%%%%%%%%%%%%% Max number of iteration for ADMM-Q
-min_bis = 0;% %%%%%%%%%%%%%%%%%%%%%%%% Min of domain
-max_bis = 600;% %%%%%%%%%%%%%%%%%%%%%%%% Max of domain
+error_bisection = 1e-5; % Max number of iteration for ADMM-Q
+min_bis = 0; % Min of domain
+max_bis = 600; % Max of domain
 no_obj = false;
 if no_obj
     no_obj_str = 'noObj';
@@ -112,17 +74,11 @@ TempS = (ones(n,n) + 2*eye(n))^(-1);
 fprintf('Fro Norm of TempS: %.4f\n', norm(TempS,'fro'))
 TempS2 = (ones(n,n) + 3*eye(n))^(-1);
 fprintf('Fro Norm of TempS2: %.4f\n', norm(TempS2,'fro'))
-% fprintf('Norm of TempS: %.4f\n', norm(TempS))
-%TempS = 0.5*eye(n) - 1/(2*(n+2)) * ones(n,n);
-%Temptheta = (eye(numel(c)) + c*c')^(-1);
 Temptheta = eye(numel(c)) - 1/(1+norm(c)^2)* c*c';
 TempW =  (eye(m) + ones(m,m))^(-1);
 fprintf('Fro Norm of TempW: %.4f\n', norm(TempW,'fro'))
-% fprintf('Norm of TempW: %.4f\n', norm(TempW))
-%TempW =  eye(m) - 1/(1+m)*ones(m,m);
 Tempu = (eye(m) + D'*D + A'*A + c*c')^(-1);
 fprintf('Fro Norm of Tempu: %.4f\n', norm(Tempu,'fro'))
-% fprintf('Norm of Tempu: %.4f\n', norm(Tempu))
 
 lagrangian = zeros(MaxIter,1);
 ConstViolation = zeros(MaxIter,1);
@@ -131,34 +87,25 @@ total_travel_time_array = zeros(MaxIter,1);
 
 fprintf('Norm of u: %.4f\n', norm(u))
 fprintf('Fro Norm of W: %.4f\n', norm(W,'fro'))
-% fprintf('Norm of W: %.4f\n', norm(W))
 fprintf('Fro Norm of H: %.4f\n', norm(H,'fro'))
-% fprintf('Norm of H: %.4f\n', norm(H))
 fprintf('Fro Norm of S: %.4f\n', norm(S,'fro'))
-% fprintf('Norm of S: %.4f\n', norm(S))
 fprintf('Norm of gamma: %.4f\n', norm(gamma))
 fprintf('Norm of beta: %.4f\n', norm(beta))
-fprintf('Norm of Q: %.4f\n', norm(Q,'fro'))
 
 counter_save = 1;
 
 time_array = zeros(100, 7);
 for iter = 1:(MaxIter+MaxIterQ)
-%     tic#########################################
-    %     iter#########################################
     permutation_order = randi([0, 1]);
-    permutation_order = 1; % #########################################
     if permutation_order==1
         % Block 1
         if iter<=MaxIter
             tic 
-%             fprintf('Computation time of S:')
             S = (1/rho)*(-lambda1*ones(1,n) + lambda5 + lambda9 + rho * u * ones(1,n) + rho * H + rho*W)*TempS;
             time_array(iter, 1) = toc;
         else
             S = (1/rho)*(-lambda1*ones(1,n) + lambda5 + lambda9 + rho * u * ones(1,n) + rho * H + rho*W + lambda10 + rho*Q)*TempS2;
         end
-%         fprintf('Computation time of gamma:')
         tic
         if no_obj
             F_gamma_total = 0;
@@ -180,33 +127,24 @@ for iter = 1:(MaxIter+MaxIterQ)
                 l = lambda4(iter_gamma);
                 v = v2(iter_gamma) + v3(iter_gamma) + v4(iter_gamma); 
                 gamma(iter_gamma) = bisectionMethodNew(gradient_gamma, v, min_bis, max_bis, error_bisection, tt0, w, l, a, rho);
-%                 F_gamma_total = F_gamma_total + F_gamma(gamma(iter_gamma,
-%                 1), v, tt0, w); #########################################
             end
         end
         time_array(iter, 2) = toc;
         
-%         total_travel_time_array(iter, 1) = F_gamma_total; % #################################
         tic
-%         fprintf('Computation time of beta:')
         beta = (1/rho) * (-lambda7 - rho*c'*u+rho*Omega);
         if beta<0
             beta = 0;
         end
         time_array(iter, 3) = toc;
 
-%         beta = 0;
         
         % Block 2
-%         u = (1/rho)* Tempu * (lambda1 +rho*S*ones(n,1) - D'*lambda3 +  ...
-%             rho*D'*q - A'*lambda4 + rho*A'*gamma - c*(lambda7+beta-Omega));
-%         fprintf('Computation time of u')
         tic
         u = (1/rho)* Tempu * (lambda1 +rho*S*ones(n,1) - D'*lambda3 +  ...
             rho*D'*q - A'*lambda4 + rho*A'*gamma - c*lambda7-c*rho*(beta-Omega));
         time_array(iter, 4) = toc;
         
-%         fprintf('Computation time of W')
         tic
         W = (1/rho)*TempW*(-ones(m,1)*lambda2' - lambda9 + ...
             rho*ones(size(S)) + rho *S);
@@ -222,7 +160,6 @@ for iter = 1:(MaxIter+MaxIterQ)
             lambda_H = lambda_H_list(4);
         end
         tic 
-%         fprintf('Computation time of H')
         H = (1/(rho-lambda_H))*(-lambda5 + rho*S - 0.5*lambda_H);
         
         if rho>lambda_H
@@ -235,8 +172,6 @@ for iter = 1:(MaxIter+MaxIterQ)
         time_array(iter, 6) = toc;
     else
         % Block 2
-%         u = (1/rho)* Tempu * (lambda1 +rho*S*ones(n,1) - D'*lambda3 +  ...
-%             rho*D'*q - A'*lambda4 + rho*A'*gamma - c*(lambda7+beta-Omega));
         u = (1/rho)* Tempu * (lambda1 +rho*S*ones(n,1) - D'*lambda3 +  ...
             rho*D'*q - A'*lambda4 + rho*A'*gamma - c*lambda7-c*rho*(beta-Omega));
         W = (1/rho)*TempW*(-ones(m,1)*lambda2' - lambda9 + ...
@@ -296,63 +231,13 @@ for iter = 1:(MaxIter+MaxIterQ)
 %         beta = 0;
     end
     
-%     if iter<=MaxIter
-%         S = (1/rho)*(-lambda1*ones(1,n) + lambda5 + lambda9 + rho * u * ones(1,n) + rho * H + rho*W)*TempS;
-%     else
-%         S = (1/rho)*(-lambda1*ones(1,n) + lambda5 + lambda9 + rho * u * ones(1,n) + rho * H + rho*W + lambda10 + rho*Q)*TempS2;
-%     end
-%     if no_obj
-%         gamma = (1/rho) * lambda4 + A*u;
-%     else
-%         F_gamma_total = 0;
-%         for iter_gamma = 1:size(gamma, 1)
-%             tt0 = tt0_array(mod(iter_gamma, size(tt0_array, 1)) + 1, 3);
-%             w = w_array(mod(iter_gamma, size(w_array, 1)) + 1, 3);
-%             a = A(iter_gamma, :);
-%             l = lambda4(iter_gamma);
-%             gamma(iter_gamma) = bisectionMethod(gradient_gamma, min_bis, max_bis, error_bisection, tt0, w, l, a, rho);
-%             F_gamma_total = F_gamma_total + F_gamma(gamma(iter_gamma, 1), tt0, w);
-%         end
-%     end
-%     total_travel_time_array(iter, 1) = F_gamma_total;
-%     beta = (1/rho) * (-lambda7 - rho*c'*u+rho*Omega);
-%     if beta<0
-%         beta = 0;
-%     end
-%     beta = 0;
-%     
-%     u = (1/rho)* Tempu * (lambda1 +rho*S*ones(n,1) - D'*lambda3 +  ...
-%         rho*D'*q - A'*lambda4 + rho*A'*gamma - c*(lambda7+beta-Omega));
-%     W = (1/rho)*TempW*(-ones(m,1)*lambda2' - lambda9 + ...
-%         rho*ones(size(S)) + rho *S);
-%     
-%     if iter<=MaxIter/6
-%         lambda_H = lambda_H_list(1);
-%     elseif  (iter>MaxIter/6) && (2*MaxIter/6)
-%         lambda_H = lambda_H_list(2);
-%     elseif (2*iter>MaxIter/6) && (4*MaxIter/6)
-%         lambda_H = lambda_H_list(3);
-%     else
-%         lambda_H = lambda_H_list(4);
-%     end
-%     H = (1/(rho-lambda_H))*(-lambda5 + rho*S - 0.5*lambda_H);
-%     if rho>lambda_H
-%         H(H<0) = 0;
-%         H(H>1) = 1;
-%     else
-%         H(H<=0.5) = 1;
-%         H(H>0.5) = 0;
-%     end
-%     fprintf('Computation time of dual variables:')
     tic
     lambda1 = lambda1 + rho*(S*ones(n,1)-u);
     lambda2 = lambda2 + rho*(W'*ones(m,1)-ones(n,1));
     lambda3 = lambda3 + rho*(D*u -q);
     lambda4 = lambda4 + rho*(A*u-gamma);
     lambda5 = lambda5 + rho*(H-S);
-    %    lambda6 = lambda6 + rho*(theta-u);
     lambda7 = lambda7 + rho*(c'*u+beta-Omega);
-    %    lambda8 = lambda8 + rho*(u-v);
     lambda9 = lambda9 + rho*(W-S);
     if iter>MaxIter
         lambda10 = lambda10 + rho*(Q-S);
@@ -391,29 +276,16 @@ for iter = 1:(MaxIter+MaxIterQ)
         ConstViolation_normalized(iter) = ConstViolation_normalized(iter) + ...
             norm(Q-S,'fro')/(norm(Q, 'fro') + norm(S, 'fro'));
         ConstViolation(iter) = ConstViolation(iter) + norm(Q-S,'fro');
-%     else
-%         ConstViolation_normalized(iter) = norm(S*ones(n,1)-u)/(norm(S)*norm(ones(n,1)) + norm(u)) + ...
-%             norm(W'*ones(m,1)-ones(n,1))/(norm(W')*norm(ones(m,1)) + norm(ones(n,1))) + ...
-%             norm(D*u -q)/(norm(D)*norm(u) + norm(q)) + ...
-%             norm(H-S,'fro')/(norm(H, 'fro') + norm(S, 'fro')) + ...
-%             norm(A*u-gamma)/(norm(A)*norm(u) + norm(gamma)) +...
-%             norm(c'*u+beta-Omega)/(norm(c')*norm(u) + norm(beta) + norm(Omega)) + ...
-%             norm(W-S,'fro')/(norm(W, 'fro') + norm(S, 'fro'));
-%         ConstViolation(iter) = norm(S*ones(n,1)-u)+norm(W'*ones(m,1)-ones(n,1))+norm(D*u -q)+ norm(H-S,'fro') + norm(A*u-gamma)+norm(c'*u+beta-Omega) + norm(W-S,'fro');
     end
     
     if mod(iter, 25)==0
         iter
         fprintf('Norm of u: %.10f\n', norm(u))
         fprintf('Fro Norm of W: %.10f\n', norm(W,'fro'))
-        %     fprintf('Norm of W: %.4f\n', norm(W))
         fprintf('Fro Norm of H: %.10f\n', norm(H,'fro'))
-        %     fprintf('Norm of H: %.4f\n', norm(H))
         fprintf('Fro Norm of S: %.10f\n', norm(S,'fro'))
-        %     fprintf('Norm of S: %.4f\n', norm(S))
         fprintf('Norm of gamma: %.10f\n', norm(gamma))
         fprintf('Norm of beta: %.10f\n', norm(beta))
-        fprintf('Norm of Q: %.4f\n', norm(Q,'fro'))
         
         fprintf('Norm of Gap1 (normalized): %.10f\n', norm(S*ones(n,1)-u)/(norm(S)*norm(ones(n,1) + norm(u))))
         fprintf('Fro Norm of Gap2 (normalized): %.10f\n', norm(W'*ones(m,1)-ones(n,1))/(norm(W')*norm(ones(m,1)) + norm(ones(n,1))))
@@ -450,11 +322,8 @@ for iter = 1:(MaxIter+MaxIterQ)
         iter
         fprintf('\n\n\nNorm of u: %.10f\n', norm(u))
         fprintf('Fro Norm of W: %.10f\n', norm(W,'fro'))
-        %     fprintf('Norm of W: %.4f\n', norm(W))
         fprintf('Fro Norm of H: %.10f\n', norm(H,'fro'))
-        %     fprintf('Norm of H: %.4f\n', norm(H))
         fprintf('Fro Norm of S: %.10f\n', norm(S,'fro'))
-        %     fprintf('Norm of S: %.4f\n', norm(S))
         fprintf('Norm of gamma: %.10f\n', norm(gamma))
         fprintf('Norm of beta: %.10f\n', norm(beta))
         fprintf('Norm of Q: %.4f\n', norm(Q,'fro'))
@@ -491,8 +360,6 @@ for iter = 1:(MaxIter+MaxIterQ)
         size_S = size(S);
         size_S1 = size(S, 1);
         size_S2 = size(S, 2);
-        
-        % u(u<=0) = 0;
         
         cvx_solver Gurobi
         cvx_solver_settings( 'MIPGap', .01 );
@@ -543,26 +410,7 @@ for iter = 1:(MaxIter+MaxIterQ)
         filenameOutput = fullfile(outputFolder, 'AllVarOutput.mat');
         save(filenameOutput)
     end
-    %     if ConstViolation_normalized(end) < min_loss
-    %         min_loss = ConstViolation_normalized(end);
-    %         Q_best_loss = Q;
-    %     end
-    
-    %     if min_gap>ConstViolation_normalized(end) && iter>9500
-    %         if lambda_H~=0
-    %             outputFolder = fullfile(region_, setting_region, time_reigon, strcat('regularized_', no_obj_str, '_rho', num2str(rho), '_MaxIter', num2str(MaxIter), '_MaxIterQ', num2str(MaxIterQ), '_Omega', num2str(Omega), '_lambdaH', num2str(lambda_H)));
-    %         else
-    %             outputFolder = fullfile(region_, setting_region, time_reigon, strcat(no_obj_str, '_rho', num2str(rho), '_MaxIter', num2str(MaxIter), '_MaxIterQ', num2str(MaxIterQ), '_Omega', num2str(Omega)));
-    %         end
-    %
-    %         mkdir(outputFolder);
-    %
-    %         filenameOutput = fullfile(outputFolder, 'AllVarOutput.mat');
-    %
-    %         save(filenameOutput)
-    %         min_gap = ConstViolation_normalized(end);
-    %     end
-%     toc #########################################
+
 iter
 if iter==100
     iter % #########################################
@@ -596,4 +444,3 @@ save(filenameOutput)
 plot(ConstViolation_normalized)
 plot(total_travel_time_array)
 toc
-% diary('off');
