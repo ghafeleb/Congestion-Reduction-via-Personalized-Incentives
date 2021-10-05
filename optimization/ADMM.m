@@ -9,7 +9,7 @@ fileName = '_StartHour_7_AVG15_pad_theta1e+00_inc_2_10';
 filename = fullfile(region_, setting_region, time_reigon, strcat('AllVar', fileName, '.mat'));
 load(filename);
 
-%%
+%% Initialization
 beta0 = 1.0;
 beta1 = 0.15;
 tt0_array = readmatrix(fullfile(region_, strcat('Mar2May_2018_new_5-22_link_tt_0_minutes_', region_, '.csv')));
