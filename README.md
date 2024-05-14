@@ -212,4 +212,17 @@ Address: 'OD_matrix_py27/R_matrix'
 Estimation of number of drivers traveling between OD pairs in different times. The format is array.
 Address: 'OD_matrix_py27/Q_matrix'
 
+## Citation
 
+If you find this repository useful in your research, please cite the following paper:
+```
+@article{ghafelebashi2023congestion,
+  title={Congestion reduction via personalized incentives},
+  author={Ghafelebashi, Ali and Razaviyayn, Meisam and Dessouky, Maged},
+  journal={Transportation Research Part C: Emerging Technologies},
+  volume={152},
+  pages={104153},
+  year={2023},
+  publisher={Elsevier}
+}
+```
